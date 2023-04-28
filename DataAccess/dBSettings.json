@@ -1,0 +1,5 @@
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=NurlanB; Database=ExampleBlazorProject;  user = sa; password = 123;  Trusted_Connection=true; TrustServerCertificate=True;"
+  }
+}

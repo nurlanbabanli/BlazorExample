@@ -1,0 +1,132 @@
+﻿@page "/category/edit/{id:int}"
+@page "/category/edit"
+@using BlazorServerApp.Models.Category
+@using System.ComponentModel.DataAnnotations
+@using Business.Abstract
+@using Entities.Dtos
+
+@inject ICategoryService _categoryService;
+@inject IJSRuntime _jsRuntime;
+@inject NavigationManager NavigationManager;
+
+<div class="vh-10 d-flex flex-column justify-content-center align-items-center">
+    <h1 class="text-center mb-5 text-primary">@Title Category</h1>
+
+    <div class="bg-light card w-50  rounded shadow-lg" style="max-width: 500px">
+        <div class="card-body rounded">
+            <EditForm Model="@CategoryUIDto" OnValidSubmit="@HandleVlaidSubmit">
+                <DataAnnotationsValidator />
+                <div class="form-group mb-4">
+                    <label for="categoryName" class="form-label fs-4 mb-2">Category Name</label>
+                    <InputText class="form-control rounded-pill" id="categoryName" placeholder="Enter category name" @bind-Value="@CategoryUIDto.Name" />
+                    <ValidationMessage For="@(() => CategoryUIDto.Name)" Class="form-text text-danger mt-2" />
+                </div>
+
+                <div class="d-grid gap-3 mt-5">
+                    <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm">@Title Category</button>
+                    <a href="/category" class="btn btn-secondary btn-lg rounded-pill shadow-sm">Cancel</a>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+@code {
+    private CategoryUIDto CategoryUIDto = new CategoryUIDto();
+    private string Title = "Create";
+
+
+    [Parameter]
+    public int Id { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id!=0)
+        {
+            Title="Update";
+            await GetCategory(Id);
+        }
+    }
+
+    private async Task HandleVlaidSubmit(EditContext editContext)
+    {
+        if (CategoryUIDto.Id==0)
+        {
+            await AddCategory(editContext);
+        }
+        else
+        {
+           await UpdateCategory();
+        }
+    }
+
+    private async Task GetCategory(int id)
+    {
+        var getCategoryDataResult = await _categoryService.GetAsync(Id);
+        if (getCategoryDataResult==null)
+        {
+            await _jsRuntime.InvokeVoidAsync("ShowToastrError", "Get Category error");
+            return;
+        }
+        else if (!getCategoryDataResult.IsSuccess)
+        {
+            await _jsRuntime.InvokeVoidAsync("ShowToastrError", getCategoryDataResult.Message);
+            return;
+        }
+
+        CategoryUIDto.Id=getCategoryDataResult.Data.Id;
+        CategoryUIDto.Name=getCategoryDataResult.Data.Name;
+        CategoryUIDto.CreatedDate=getCategoryDataResult.Data.CreatedDate;
+    }
+
+    private async Task UpdateCategory()
+    {
+        var categoryDto = new CategoryDto();
+        categoryDto.Id=CategoryUIDto.Id;
+        categoryDto.Name=CategoryUIDto.Name;
+        categoryDto.CreatedDate=CategoryUIDto.CreatedDate;
+        var updateDataResult=await _categoryService.UpdateAsync(categoryDto);
+        if (updateDataResult==null)
+        {
+            await _jsRuntime.InvokeVoidAsync("ShowToastrError", "Category update error");
+        }
+        else if (!updateDataResult.IsSuccess)
+        {
+            await _jsRuntime.InvokeVoidAsync("ShowToastrError", updateDataResult.Message); 
+        }
+        else
+        {
+            await _jsRuntime.InvokeVoidAsync("ShowToastrSuccess", "Category updated");
+            NavigationManager.NavigateTo("/category");
+        }
+    }
+
+    private async Task AddCategory(EditContext editContext)
+    {
+        var categoryDto = new CategoryDto();
+        categoryDto.Name=CategoryUIDto.Name;
+        categoryDto.CreatedDate=DateTime.Now;
+
+        var addResult = await _categoryService.AddAsync(categoryDto);
+        if (addResult==null)
+        {
+            await _jsRuntime.InvokeVoidAsync("ShowToastrError", "Category add error");
+        }
+        else if (!addResult.IsSuccess)
+        {
+            await _jsRuntime.InvokeVoidAsync("ShowToastrError", addResult.Message);
+        }
+        else
+        {
+            await _jsRuntime.InvokeVoidAsync("ShowToastrSuccess", "Category added");
+            NavigationManager.NavigateTo("/category");
+        }
+    }
+
+}
