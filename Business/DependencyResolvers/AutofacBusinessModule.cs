@@ -23,6 +23,9 @@ namespace Business.DependencyResolvers
             builder.RegisterType<MssqlEfCategoryDal>().As<ICategoryDal>().SingleInstance();
             builder.RegisterType<CategoryManager>().As<ICategoryService>().SingleInstance();
 
+            builder.RegisterType<MssqlEfProductDal>().As<IProductDal>().SingleInstance();
+            builder.RegisterType<ProductManager>().As<IProductService>().SingleInstance();
+
             builder.RegisterAutoMapper(false,AppDomain.CurrentDomain.GetAssemblies());
 
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();

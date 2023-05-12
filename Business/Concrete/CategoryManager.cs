@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.Rules;
 using Business.Validation.FluentValidation;
 using Core.Aspect.Autofac.Exception;
@@ -33,9 +34,15 @@ namespace Business.Concrete
 
         [ValidationAspect(typeof(AddCategoryDtoValidation), Priority =3)]
         [ExceptionLogAspect(typeof(MssqlLogger),Priority =2)]
+        //[SecuredOperation("user,superUser,admin", Priority = 1)]
         public async Task<IDataResult<CategoryDto>> AddAsync(CategoryDto categoryDto)
         {
+
+
+            //throw new Exception("This is exception test");
+
             IResult rulecheckResult=BusinessRules.RunRules(await CategoryRules.IsCategoryExists(_categoryDal,categoryDto));
+            rulecheckResult=null;
             if (!rulecheckResult.IsSuccess)
             {
                 return new ErrorDataResult<CategoryDto>(null, rulecheckResult.Message);
@@ -44,13 +51,15 @@ namespace Business.Concrete
 
             var category=_autoMapper.Map<CategoryDto,Category>(categoryDto);
             var addResult =  await _categoryDal.AddAsync(category);
+            if (addResult==null) return new ErrorDataResult<CategoryDto>(null, "Category add error");
 
             var mappedAddResult=_autoMapper.Map<Category,CategoryDto>(addResult);
-
-            if (addResult==null) return new ErrorDataResult<CategoryDto>(null, "Category add error");
             return new SuccessDataResult<CategoryDto>(mappedAddResult,"Category Added");
         }
 
+
+        [ValidationAspect(typeof(AddCategoryDtoValidation), Priority = 3)]
+        [ExceptionLogAspect(typeof(MssqlLogger), Priority = 2)]
         public async Task<IResult> DeleteAsync(int categoryId)
         {
             //await Task.Delay(5000);
@@ -63,6 +72,9 @@ namespace Business.Concrete
             return new SuccessResult("Category deleted");
         }
 
+
+        [ValidationAspect(typeof(AddCategoryDtoValidation), Priority = 3)]
+        [ExceptionLogAspect(typeof(MssqlLogger), Priority = 2)]
         public async Task<IDataResult<CategoryDto>> GetAsync(int categoryId)
         {
             var category=await _categoryDal.GetAsync(c=>c.Id == categoryId);
@@ -73,6 +85,9 @@ namespace Business.Concrete
             return new SuccessDataResult<CategoryDto>(mappedCategory);
         }
 
+
+        [ValidationAspect(typeof(AddCategoryDtoValidation), Priority = 3)]
+        [ExceptionLogAspect(typeof(MssqlLogger), Priority = 2)]
         public async Task<IDataResult<IEnumerable<CategoryDto>>> GetAllAsync()
         {
             //Thread.Sleep(5000);
@@ -84,6 +99,10 @@ namespace Business.Concrete
             return new SuccessDataResult<IEnumerable<CategoryDto>>(mappedCategories);
         }
 
+
+        [ValidationAspect(typeof(AddCategoryDtoValidation), Priority = 3)]
+        [ExceptionLogAspect(typeof(MssqlLogger), Priority = 2)]
+        //[SecuredOperation("user,superUser,admin", Priority = 1)]
         public async Task<IDataResult<CategoryDto>> UpdateAsync(CategoryDto categoryDto)
         {
             var categoryyToUpdate=await _categoryDal.GetAsync(c=>c.Id==categoryDto.Id);

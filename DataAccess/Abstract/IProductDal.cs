@@ -5,6 +5,6 @@ namespace DataAccess.Abstract
 {
     public interface IProductDal : IEfEntityRepository<Product>
     {
-
+        //Task<List<Product>> GetAllProductsWithCategory();
     }
 }

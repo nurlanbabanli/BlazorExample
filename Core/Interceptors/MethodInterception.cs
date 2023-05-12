@@ -14,13 +14,19 @@ namespace Core.Interceptors
         protected virtual void OnException(IInvocation invocation, Exception exception) { }
         protected virtual void OnSuccess(IInvocation invocation) { }
 
-        public override void Intercept(IInvocation invocation)
+        public override async void Intercept(IInvocation invocation)
         {
             bool isSuccess = true;
             OnBefore(invocation);
             try
             {
                 invocation.Proceed();
+                var invocationResult = invocation.ReturnValue;
+                if(invocationResult is Task)
+                {
+                    var invocationResultTask= invocationResult as Task;
+                    await invocationResultTask;
+                }
             }
             catch (Exception exception)
             {

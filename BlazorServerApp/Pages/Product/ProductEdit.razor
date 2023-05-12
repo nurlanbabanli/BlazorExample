@@ -1,0 +1,64 @@
+﻿@page "/product/edit/{id:int}"
+@page "/product/Edit"
+
+<div class="vh-10 d-flex flex-column justify-content-center align-items-center">
+    <h1 class="text-center mb-5 text-primary">@Title Product</h1>
+
+    <div class="bg-light card w-50  rounded shadow-lg" style="max-width: 500px">
+        <div class="card-body rounded">
+            <EditForm Model="@productUIDto" OnValidSubmit="@HandleValidSubmit">
+                <DataAnnotationsValidator />
+                <div class="row">
+                    <div class="col-8">
+                        <div class="form-group mb-2">
+                            <label for="productName" class="form-label fs-4 mb-2">Product Name</label>
+                            <InputText class="form-control rounded-pill" id="productName" placeholder="Enter product name" @bind-Value="@productUIDto.Name" />
+                            <ValidationMessage For="@(() => productUIDto.Name)" Class="form-text text-danger mt-2" />
+                        </div>
+
+                        <div class="form-group mb-2">
+                            <label for="productColor" class="form-label fs-4">Product Color</label>
+                            <InputText class="form-control rounded-pill" id="productColor" placeholder="Enter product color" @bind-Value="@productUIDto.Color" />
+                            <ValidationMessage For="@(() => productUIDto.Color)" Class="form-text text-danger mt-2" />
+                        </div>
+                    </div>
+                    <div class="col-4 pt-5">
+                        <img src=@productUIDto.ImageUrl class="w-100" />
+                    </div>
+                </div>
+
+                <div class="form-check m-2 mb-2">
+                    <InputCheckbox id="shopFavorites" @bind-Value=productUIDto.ShopFavorites class="form-check-input fs-4"></InputCheckbox>
+                    <label for="shopFavorites" class="form-check-label fs-4">Is Shop Favorites</label>
+                </div>
+
+                <div class="mb-2">
+                    <InputSelect @bind-Value="@productUIDto.CategoryId" class="form-select">
+                        <option value="0" disabled="disabled" selected>--Select Category--</option>
+                        @foreach (var category in categoryUIDtos)
+                        {
+                            <option value=@category.Id>@category.Name</option>
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="@(() => productUIDto.CategoryId)" Class="form-text text-danger mt-2" />
+                </div>
+
+                <div class="form-group mb-4">
+                    <label for="productDescription" class="form-label fs-4 mb-2">Description</label>
+                    <InputTextArea class="form-control" id="productDescription" placeholder="Product description" @bind-Value="@productUIDto.Description" />
+                    <ValidationMessage For="@(() => productUIDto.Description)" Class="form-text text-danger mt-2" />
+                </div>
+
+                <div class="form-group mb-4">
+                    <label for="productImageSelection" class="form-label fs-4 mb-2">Select product image</label>
+                    <InputFile id="productImageSelection" OnChange="HandleImageUpload"></InputFile>
+                </div>
+
+                <div class="d-grid gap-3 mt-5">
+                    <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm">@Title Product</button>
+                    <a href="/product" class="btn btn-secondary btn-lg rounded-pill shadow-sm" @onclick="EditCancelHandler">Cancel</a>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>

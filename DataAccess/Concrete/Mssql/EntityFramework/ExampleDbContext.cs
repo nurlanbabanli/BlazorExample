@@ -31,7 +31,7 @@ namespace DataAccess.Concrete.Mssql.EntityFramework
             //?? throw new Exception("DB configuration error");
             //var configuration = new ConfigurationBuilder().AddJsonFile("dBSettings.json").Build();
 
-            var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+            var configuration = new ConfigurationBuilder().AddJsonFile("dBSettings.json").Build();
             optionsBuilder.UseSqlServer(configuration["ConnectionStrings:DefaultConnection"]);
 
             //optionsBuilder.UseSqlServer(connectionString);

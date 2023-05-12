@@ -14,6 +14,8 @@ namespace Business.Rules
     {
         internal static async Task<IResult> IsCategoryExists(ICategoryDal categoryDal, CategoryDto categoryDto)
         {
+            if (categoryDto==null) return new ErrorResult("Category is empty");
+
             var checkResult=await categoryDal.GetAsync(c=>c.Name==categoryDto.Name);
             if (checkResult==null) return new SuccessResult();
 
