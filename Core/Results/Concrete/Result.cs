@@ -9,17 +9,23 @@ namespace Core.Results.Concrete
 {
     public class Result : IResult
     {
-        public Result(string message, bool isSuccess) : this(isSuccess)
+        public Result(string message, bool isSuccess, bool internalServerError=false) : this(isSuccess, internalServerError)
         {
             Message = message;
         }
 
-        public Result(bool isSuccess)
+        public Result(bool isSuccess, bool internalServerError = false):this(internalServerError)
         {
             IsSuccess = isSuccess;
         }
 
+        public Result(bool internalServerError = false)
+        {
+            InternalServerError = internalServerError;
+        }
+
         public string Message { get; }
         public bool IsSuccess { get; }
+        public bool InternalServerError { get; }
     }
 }

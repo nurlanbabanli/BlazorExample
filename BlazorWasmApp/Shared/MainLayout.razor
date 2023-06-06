@@ -1,0 +1,25 @@
+﻿@inherits LayoutComponentBase
+
+<div class="page" >
+    <div class="sidebar" style="@iconMenuCssClass">
+        <NavMenu ShowIconMenu="ToggleIconMenu" HideIconText=@hideIconText />
+    </div>
+
+    <main>
+        <div class="top-row px-4">
+            <div>
+                <button type="button" class="btn btn-outline-info" style="min-width:100px">Register</button>
+            </div>
+            <div>
+               <button type="button" class="btn btn-outline-info m-2" style="min-width:100px">Login</button>
+            </div>
+        </div>
+
+        <article class="content px-4">
+
+                @Body
+
+        </article>
+    </main>
+</div>
+@*style="@iconMenuCssClass"*@

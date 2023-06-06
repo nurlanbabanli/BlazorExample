@@ -32,13 +32,13 @@ namespace Business.Concrete
             _categoryService=categoryService;
         }
 
-        [ValidationAspect(typeof(AddProductDtoValidation), Priority = 3)]
+        [ValidationAspect(typeof(AddProductDtoValidator), Priority = 3)]
         [ExceptionLogAspect(typeof(MssqlLogger), Priority = 2)]
         //[SecuredOperation("user,superUser,admin", Priority = 1)]
         public async Task<IDataResult<ProductDto>> AddAsync(ProductDto productDto)
         {
-            IResult ruleCheckResult=BusinessRules.RunRules(await ProductRules.IsProductExists(_productDal,productDto), 
-                await ProductRules.IsCategoryExists(_categoryService,productDto));
+            IResult ruleCheckResult=BusinessRules.RunRules(await ProductRules.IsProductExistsAsync(_productDal,productDto), 
+                await ProductRules.IsCategoryExistsAsync(_categoryService,productDto));
             if (!ruleCheckResult.IsSuccess)
             {
                 return new ErrorDataResult<ProductDto>(null, ruleCheckResult.Message);
@@ -53,7 +53,7 @@ namespace Business.Concrete
             return new SuccessDataResult<ProductDto>(mappedAddResult);
         }
 
-        [ValidationAspect(typeof(AddCategoryDtoValidation), Priority = 3)]
+        [ValidationAspect(typeof(AddCategoryDtoValidator), Priority = 3)]
         [ExceptionLogAspect(typeof(MssqlLogger), Priority = 2)]
         public async Task<IResult> DeleteAsync(int productId)
         {
@@ -65,7 +65,7 @@ namespace Business.Concrete
             return new SuccessResult("Category deleted");
         }
 
-        [ValidationAspect(typeof(AddCategoryDtoValidation), Priority = 3)]
+        [ValidationAspect(typeof(AddCategoryDtoValidator), Priority = 3)]
         [ExceptionLogAspect(typeof(MssqlLogger), Priority = 2)]
         public async Task<IDataResult<IEnumerable<ProductDto>>> GetAllAsync()
         {
@@ -79,7 +79,7 @@ namespace Business.Concrete
             return new SuccessDataResult<IEnumerable<ProductDto>>(mappedProducts);
         }
 
-        [ValidationAspect(typeof(AddCategoryDtoValidation), Priority = 3)]
+        [ValidationAspect(typeof(AddCategoryDtoValidator), Priority = 3)]
         [ExceptionLogAspect(typeof(MssqlLogger), Priority = 2)]
         public async Task<IDataResult<ProductDto>> GetAsync(int productId)
         {
@@ -95,7 +95,7 @@ namespace Business.Concrete
         }
 
 
-        [ValidationAspect(typeof(AddCategoryDtoValidation), Priority = 3)]
+        [ValidationAspect(typeof(AddCategoryDtoValidator), Priority = 3)]
         [ExceptionLogAspect(typeof(MssqlLogger), Priority = 2)]
         //[SecuredOperation("user,superUser,admin", Priority = 1)]
         public async Task<IDataResult<ProductDto>> UpdateAsync(ProductDto productDto)

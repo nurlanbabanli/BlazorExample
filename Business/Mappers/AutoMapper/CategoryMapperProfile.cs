@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace Business.Mappers.AutoMapper
 {
-    public class CategoryMappingProfile:Profile
+    public class CategoryMapperProfile:Profile
     {
-        public CategoryMappingProfile()
+        public CategoryMapperProfile()
         {
             CreateMap<Category, CategoryDto>().ReverseMap()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))

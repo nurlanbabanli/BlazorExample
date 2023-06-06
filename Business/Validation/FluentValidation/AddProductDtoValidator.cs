@@ -4,9 +4,9 @@ using FluentValidation.Results;
 
 namespace Business.Validation.FluentValidation
 {
-    public class AddProductDtoValidation : AbstractValidator<ProductDto>
+    public class AddProductDtoValidator : AbstractValidator<ProductDto>
     {
-        public AddProductDtoValidation()
+        public AddProductDtoValidator()
         {
             RuleFor(x => x.Name).NotEmpty().WithMessage("Validation error: Category name is empty");
         }

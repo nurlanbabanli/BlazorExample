@@ -32,7 +32,7 @@ namespace Business.Concrete
         }
 
 
-        [ValidationAspect(typeof(AddCategoryDtoValidation), Priority =3)]
+        [ValidationAspect(typeof(AddCategoryDtoValidator), Priority =3)]
         [ExceptionLogAspect(typeof(MssqlLogger),Priority =2)]
         //[SecuredOperation("user,superUser,admin", Priority = 1)]
         public async Task<IDataResult<CategoryDto>> AddAsync(CategoryDto categoryDto)
@@ -58,7 +58,7 @@ namespace Business.Concrete
         }
 
 
-        [ValidationAspect(typeof(AddCategoryDtoValidation), Priority = 3)]
+        [ValidationAspect(typeof(AddCategoryDtoValidator), Priority = 3)]
         [ExceptionLogAspect(typeof(MssqlLogger), Priority = 2)]
         public async Task<IResult> DeleteAsync(int categoryId)
         {
@@ -73,7 +73,7 @@ namespace Business.Concrete
         }
 
 
-        [ValidationAspect(typeof(AddCategoryDtoValidation), Priority = 3)]
+        [ValidationAspect(typeof(AddCategoryDtoValidator), Priority = 3)]
         [ExceptionLogAspect(typeof(MssqlLogger), Priority = 2)]
         public async Task<IDataResult<CategoryDto>> GetAsync(int categoryId)
         {
@@ -86,7 +86,7 @@ namespace Business.Concrete
         }
 
 
-        [ValidationAspect(typeof(AddCategoryDtoValidation), Priority = 3)]
+        [ValidationAspect(typeof(AddCategoryDtoValidator), Priority = 3)]
         [ExceptionLogAspect(typeof(MssqlLogger), Priority = 2)]
         public async Task<IDataResult<IEnumerable<CategoryDto>>> GetAllAsync()
         {
@@ -100,7 +100,7 @@ namespace Business.Concrete
         }
 
 
-        [ValidationAspect(typeof(AddCategoryDtoValidation), Priority = 3)]
+        [ValidationAspect(typeof(AddCategoryDtoValidator), Priority = 3)]
         [ExceptionLogAspect(typeof(MssqlLogger), Priority = 2)]
         //[SecuredOperation("user,superUser,admin", Priority = 1)]
         public async Task<IDataResult<CategoryDto>> UpdateAsync(CategoryDto categoryDto)

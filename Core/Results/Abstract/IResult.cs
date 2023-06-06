@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Core.Results.Abstract
 {
-    public interface IResult
+    public interface IResult:IErrorResult
     {
         string Message { get; }
         bool IsSuccess { get; }

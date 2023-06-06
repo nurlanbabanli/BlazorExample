@@ -1,4 +1,5 @@
-﻿using Core.IoC;
+﻿using Core.Entities.Concrete;
+using Core.IoC;
 using Entities.Concrete;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -44,5 +45,8 @@ namespace DataAccess.Concrete.Mssql.EntityFramework
 
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<OperationClaim> OperationClaims { get; set; }
+        public DbSet<UserOperationClaim> UserOperations { get; set; }
     }
 }

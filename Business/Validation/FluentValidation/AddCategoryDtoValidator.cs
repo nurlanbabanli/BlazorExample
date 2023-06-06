@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace Business.Validation.FluentValidation
 {
-    public class AddCategoryDtoValidation:AbstractValidator<CategoryDto>
+    public class AddCategoryDtoValidator:AbstractValidator<CategoryDto>
     {
-        public AddCategoryDtoValidation()
+        public AddCategoryDtoValidator()
         {
             RuleFor(x => x.Name).NotEmpty().WithMessage("Validation error: Category name is empty");
         }

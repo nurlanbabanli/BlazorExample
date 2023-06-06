@@ -1,0 +1,49 @@
+﻿<div class="top-row  navbar navbar-dark" style="padding-left: 30px">
+    <div style=" white-space:nowrap">
+        <span class="oi oi-monitor" style="color:black;" aria-hidden="true"></span>
+        @if (!HideIconText)
+        {
+            <span role="button" style="color: black; overflow:hidden" @onclick="ToggleNavMenu">Blazor Test App</span>
+        }
+    </div>
+</div>
+
+
+<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+    <nav class="flex-column">
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="oi oi-home" style="color: black;" aria-hidden="true"></span>
+                @if (!HideIconText)
+                {
+                    <span class="pt-1" style="color: black; overflow:hidden">Home</span>
+                }
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="fetchdata">
+                <span class="oi oi-list-rich" style="color: black; overflow:hidden;" aria-hidden="true"></span>
+                @if (!HideIconText)
+                {
+                    <span style="color: black; overflow:hidden">Products</span>
+                }
+            </NavLink>
+        </div>
+    </nav>
+</div>
+
+<div class="bottom-row">
+    <div class="icon-menu-arrow">
+        @if (!@iconMenuActive)
+        {
+            <span role="button" class="oi oi-arrow-left" style="color: black;" @onclick="ToggleIconMenu"></span>
+        }
+        else
+        {
+            <span role="button" class="oi oi-arrow-right" style="color: black;" @onclick="ToggleIconMenu"></span>
+        }
+    </div>
+</div>
+
+
+

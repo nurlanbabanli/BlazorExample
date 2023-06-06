@@ -1,0 +1,10 @@
+﻿
+@page "/404"
+@page "/404/{NotFoundMessage}"
+
+<h3>@NotFoundMessage</h3>
+
+@code {
+    [Parameter]
+    public string NotFoundMessage { get; set; }     
+}

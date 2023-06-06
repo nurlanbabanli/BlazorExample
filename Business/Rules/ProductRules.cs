@@ -8,7 +8,7 @@ namespace Business.Rules
 {
     internal static class ProductRules
     {
-        internal static async Task<IResult> IsProductExists(IProductDal productDal, ProductDto productDto)
+        internal static async Task<IResult> IsProductExistsAsync(IProductDal productDal, ProductDto productDto)
         {
             if (productDto==null) return new ErrorResult("Product is empty");
 
@@ -18,7 +18,7 @@ namespace Business.Rules
             return new ErrorResult("Product name is exists");
         }
 
-        internal static async Task<IResult> IsCategoryExists(ICategoryService categoryService, ProductDto productDto)
+        internal static async Task<IResult> IsCategoryExistsAsync(ICategoryService categoryService, ProductDto productDto)
         {
             if (productDto==null) return new ErrorResult("Product is empty");
 

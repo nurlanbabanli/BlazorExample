@@ -4,14 +4,13 @@ namespace Core.Results.Concrete
 {
     public class ErrorResult : Result, IResult
     {
-        public ErrorResult(string message) : base(message, false)
-        {
 
+        public ErrorResult(string message, bool internalServerError = false) : base(message, false, internalServerError)
+        {
         }
 
-        public ErrorResult() : base(false)
+        public ErrorResult(bool internalServerError = false) : base(false, internalServerError)
         {
-
         }
     }
 }
