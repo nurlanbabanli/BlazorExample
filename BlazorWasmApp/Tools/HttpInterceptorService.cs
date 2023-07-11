@@ -23,6 +23,7 @@ namespace BlazorWasmApp.Tools
 
             if (e.Response != null)
             {
+                
                 if (!e.Response.IsSuccessStatusCode)
                 {
                     var statusCode=e.Response.StatusCode;
@@ -46,6 +47,11 @@ namespace BlazorWasmApp.Tools
 
                     _navigationManager.NavigateTo("/500");
                 }
+            }
+            else
+            {
+                _navigationManager.NavigateTo("/404/"+message);
+                return;
             }
         }
     }

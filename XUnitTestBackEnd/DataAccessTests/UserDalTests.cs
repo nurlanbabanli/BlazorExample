@@ -11,6 +11,8 @@ using XUnitTestBackEnd.AutofacContainerBuild;
 
 namespace XUnitTestBackEnd.DataAccessTests
 {
+
+
     public class UserDalTests
     {
         private readonly IContainer _container;
@@ -49,6 +51,47 @@ namespace XUnitTestBackEnd.DataAccessTests
                 var user = await userDal.GetAsync(x => x.Email=="testEmail@gmail.com");
                 //Assert.NotNull(user);
             }
+        }
+
+        [Fact]
+        public async Task TestDeleteUser()
+        {
+            using (var scope=_container.BeginLifetimeScope())
+            {
+                var userDal=scope.Resolve<IUserDal>();
+
+                //var userToDelete=await AddUser(userDal);
+
+                var user = new User
+                {
+                    Email="testUser123@gmail.com",
+                    FirstName ="TestUserFirstName123",
+                    LastName="TestUserLastName123",
+                    IsActive=false,
+                    PasswordHash=new byte[] { },
+                    PasswordSalt=new byte[] { }
+                };
+
+                var deleteResult=await userDal.DeleteUserAsync(user);
+                Assert.True(deleteResult);
+            }
+        }
+
+        public async Task<User> AddUser(IUserDal userDal)
+        {
+            var user = new User
+            {
+                Email="testUser123@gmail.com",
+                FirstName ="TestUserFirstName123",
+                LastName="TestUserLastName123",
+                IsActive=false,
+                PasswordHash=new byte[] { },
+                PasswordSalt=new byte[] { }
+            };
+
+           
+
+            return await userDal.AddAsync(user);
         }
     }
 }

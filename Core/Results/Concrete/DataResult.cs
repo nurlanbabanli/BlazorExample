@@ -4,22 +4,22 @@ namespace Core.Results.Concrete
 {
     public class DataResult<TData> : Result, IDataResult<TData>
     {
-        public DataResult(TData data, bool internalServerError = false) : this(data, string.Empty,internalServerError)
+        public DataResult(TData data, bool internalServerError = false) : this(data: data, message: string.Empty, internalServerError: internalServerError)
         {
 
         }
 
-        public DataResult(TData data, string message, bool internalServerError = false) : this(data, message, false, internalServerError)
+        public DataResult(TData data, string message, bool internalServerError = false) : this(data: data, message: message, isSuccess: false, internalServerError: internalServerError)
         {
 
         }
 
-        public DataResult(TData data, bool isSuccess, bool internalServerError = false) : this(data, string.Empty, isSuccess,internalServerError)
+        public DataResult(TData data, bool isSuccess, bool internalServerError = false) : this(data: data, message: string.Empty, isSuccess: isSuccess, internalServerError: internalServerError)
         {
 
         }
 
-        public DataResult(TData data, string message, bool isSuccess, bool internalServerError=false) : base(message, isSuccess,internalServerError)
+        public DataResult(TData data, string message, bool isSuccess, bool internalServerError = false) : base(message: message, isSuccess: isSuccess, internalServerError: internalServerError)
         {
             Data = data;
         }

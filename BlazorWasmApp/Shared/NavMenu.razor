@@ -20,15 +20,18 @@
                 }
             </NavLink>
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="fetchdata">
-                <span class="oi oi-list-rich" style="color: black; overflow:hidden;" aria-hidden="true"></span>
-                @if (!HideIconText)
-                {
-                    <span style="color: black; overflow:hidden">Products</span>
-                }
-            </NavLink>
-        </div>
+
+        <AuthorizeView Roles="Admino">
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="fetchdata">
+                    <span class="oi oi-list-rich" style="color: black; overflow:hidden;" aria-hidden="true"></span>
+                    @if (!HideIconText)
+                    {
+                        <span style="color: black; overflow:hidden">Products</span>
+                    }
+                </NavLink>
+            </div>
+        </AuthorizeView>
     </nav>
 </div>
 

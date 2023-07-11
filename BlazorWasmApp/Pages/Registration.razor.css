@@ -1,0 +1,12 @@
+﻿body {
+}
+
+.btn {
+    background-color: rgb(13,202,240);
+    border-color: rgb(13,202,240);
+    color:black;
+}
+
+.cancel {
+    color: rgb(13,202,240);
+}

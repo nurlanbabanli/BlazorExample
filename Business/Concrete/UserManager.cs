@@ -37,6 +37,16 @@ namespace Business.Concrete
             return new SuccessDataResult<User>(addedUser);
         }
 
+        public async Task<IResult> DeleteUserAsync(int userId)
+        {
+            var userToDelete = await _userDal.GetAsync(x => x.Id==userId);
+            if (userToDelete==null) return new ErrorResult("User not found");
+
+            var userDeleteResult=await _userDal.DeleteUserAsync(userToDelete);
+
+            return null;
+        }
+
         [ExceptionLogAspect(typeof(MssqlLogger), skipValueLog: true, Priority = 3)]
         [LogAspects(typeof(MssqlLogger), skipValueLog: true, Priority = 4)]
         public async Task<IDataResult<User>> GetByEmailAsync(string email)

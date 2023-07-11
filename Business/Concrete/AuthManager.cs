@@ -41,15 +41,12 @@ namespace Business.Concrete
         public async Task<IDataResult<UserLoginResponseDto>> LoginAsync(UserLoginDto userLoginDto)
         {
             var userDataResult=await _userService.GetByEmailAsync(userLoginDto.Email);
-            var filterResult = DataResultHandler.FilterDataResults<User, UserLoginResponseDto>(userDataResult);
-            if (filterResult!=null) return filterResult;
+            var filterResultUser = DataResultHandler.FilterDataResult<User, UserLoginResponseDto>(userDataResult);
+            if (filterResultUser!=null) return filterResultUser;
 
-
-            //if(FilterDataResults<User, UserLoginResponseDto>(userDataResult)!=null) return 
-            //return FilterDataResults<User, UserLoginResponseDto>(userDataResult);
-            //if (userDataResult == null) return new ErrorDataResult<UserLoginResponseDto>(null,"Get user error", internalServerError: true);
-            //if(userDataResult.InternalServerError) return new ErrorDataResult<UserLoginResponseDto>(null,userDataResult.Message, internalServerError: true);
-            //if (!userDataResult.IsSuccess) return new ErrorDataResult<UserLoginResponseDto>(null, userDataResult.Message);
+            var ruleCheckResult = BusinessRules.RunRules(AuthRules.CheckUserIsActive(userDataResult.Data));
+            var filterResultRuleCheck = DataResultHandler.FilterResult<UserLoginResponseDto>(ruleCheckResult);
+            if(filterResultRuleCheck!=null) return filterResultRuleCheck;
 
             var passwordHashSalt = new PasswordHashSaltDto
             {
@@ -60,20 +57,41 @@ namespace Business.Concrete
             if (!isPasswordVerified) return new ErrorDataResult<UserLoginResponseDto>(null, "Password is not correct");
 
             var operationClaimsDataResult = await _userService.GetClaimsAsync(userDataResult.Data);
-            if (operationClaimsDataResult == null) return new ErrorDataResult<UserLoginResponseDto>(null, "Get operation claims error", internalServerError: true);
-            if(!operationClaimsDataResult.IsSuccess) return new ErrorDataResult<UserLoginResponseDto>(null, operationClaimsDataResult.Message);
+            var filterResultOperationClaims = DataResultHandler.FilterDataResult<List<OperationClaim>, UserLoginResponseDto>(operationClaimsDataResult);
+            if(filterResultOperationClaims!=null) return filterResultOperationClaims;
 
             var accessTokenDataResult = _tokenHelper.CreateToken(userDataResult.Data, operationClaimsDataResult.Data);
-            if (accessTokenDataResult == null) return new ErrorDataResult<UserLoginResponseDto>(null, "Get token error", internalServerError: true);
+            var filterResultToken=DataResultHandler.FilterDataResult<AccessToken, UserLoginResponseDto>(accessTokenDataResult);
+            if( filterResultToken!=null) return filterResultToken;
 
+            var userRolesDataResult = GetUserRoles(operationClaimsDataResult.Data);
+            var filterResultUserRoles=DataResultHandler.FilterDataResult<List<string>, UserLoginResponseDto>(userRolesDataResult);
+            if(filterResultUserRoles!=null) return filterResultUserRoles;
 
-            var userLoginResponseDto=new UserLoginResponseDto
+            var userLoginResponseDto = new UserLoginResponseDto
             {
-                Token=,
-                TokenExpiration=
-            }
+                UserId=userDataResult.Data.Id,
+                Token=accessTokenDataResult.Data.Token,
+                TokenExpiration=accessTokenDataResult.Data.Expiration,
+                Email=userDataResult.Data.Email,
+                FirstName=userDataResult.Data.FirstName,
+                LastName=userDataResult.Data.LastName,
+                Roles=userRolesDataResult.Data
+            };
 
-            return null;
+            return new SuccessDataResult<UserLoginResponseDto>(userLoginResponseDto, "User login successed");
+        }
+
+        private IDataResult<List<string>> GetUserRoles(List<OperationClaim> operationClaims)
+        {
+            if (operationClaims==null) return new ErrorDataResult<List<string>>(null, "User roles not find");
+
+           var userRoles=new List<string>();
+            foreach (var claims in operationClaims)
+            {
+                userRoles.Add(claims.Name);
+            }
+            return new SuccessDataResult<List<string>>(userRoles);             
         }
 
         [ExceptionLogAspect(typeof(MssqlLogger), skipValueLog: true, Priority = 3)]
@@ -83,18 +101,19 @@ namespace Business.Concrete
         {
             var ruleCheckResult = BusinessRules.RunRules(await AuthRules.IsUserEmailExitsAsync(_userService, userRegisterDto),
                 AuthRules.CheckPasswordLength(userRegisterDto));
-            if (!ruleCheckResult.IsSuccess) return new ErrorDataResult<UserDto>(null, ruleCheckResult.Message);
-
+            var filterResultRuleCheck = DataResultHandler.FilterResult<UserDto>(ruleCheckResult);
+            if (filterResultRuleCheck!=null) return filterResultRuleCheck;
 
             var paswordHashSalt = HashingHelper.CreatePasswordHash(userRegisterDto.Password);
 
             var user = _autoMapper.Map<UserRegisterDto, User>(userRegisterDto);
             user.PasswordSalt = paswordHashSalt.PasswordSalt;
             user.PasswordHash=paswordHashSalt.PasswordHash;
+            user.IsActive=false;
 
             var addUserResult=await _userService.AddAsync(user);
-            if (addUserResult==null) return new ErrorDataResult<UserDto>(null,internalServerError:true);
-            if(!addUserResult.IsSuccess) return new ErrorDataResult<UserDto>(null, addUserResult.Message);
+            var filterResultAddedUser = DataResultHandler.FilterDataResult<User, UserDto>(addUserResult);
+            if(filterResultAddedUser!=null) return filterResultAddedUser;
 
             var userDtoResult = _autoMapper.Map<User, UserDto>(addUserResult.Data);
 

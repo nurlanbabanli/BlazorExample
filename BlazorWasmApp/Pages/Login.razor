@@ -1,0 +1,33 @@
+﻿@layout LoginLayout
+@page "/login"
+
+<div class="vh-100 d-flex flex-column justify-content-center align-items-center">
+    <div class="bg-light card w-50 shadow-lg" style="max-width:400px; border-radius:25px;">
+        <div class="card-body" style="margin-top:25px">
+            <EditForm Model=@userLoginDto OnValidSubmit="@HandleValidSubmit">
+                <DataAnnotationsValidator />
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group mb-2">
+                            <InputText class="form-control rounded-pill" id="email" placeholder="Email" @bind-Value="@userLoginDto.Email" />
+                            <ValidationMessage For="@(()=>userLoginDto.Email)" class="form-text text-danger mt-2" />
+                        </div>
+
+                        <div class="form-group mb-2">
+                            <InputText class="form-control rounded-pill" id="password" placeholder="Password" @bind-Value="@userLoginDto.Password" />
+                            <ValidationMessage For="@(()=>userLoginDto.Password)" class="form-text text-danger mt-2" />
+                        </div>
+
+                        <div class="d-grid gap-3 mt-5">
+                            <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm">Login</button>
+                        </div>
+
+                    </div>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+
+</div>
+
+

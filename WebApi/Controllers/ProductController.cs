@@ -34,7 +34,7 @@ namespace WebApi.Controllers
         [HttpGet("getAllProducts")]
         public async Task<IActionResult> GetProducts()
         {
-            return NotFound();
+            //return NotFound();
 
             var productsDataResult=await _productService.GetAllAsync();
             

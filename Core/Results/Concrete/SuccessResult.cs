@@ -4,12 +4,12 @@ namespace Core.Results.Concrete
 {
     public class SuccessResult : Result, IResult
     {
-        public SuccessResult(string message) : base(message, true)
+        public SuccessResult(string message) : base(message: message, isSuccess: true)
         {
 
         }
 
-        public SuccessResult() : base(true)
+        public SuccessResult() : base(isSuccess: true)
         {
 
         }

@@ -1,0 +1,44 @@
+﻿@layout LoginLayout
+@page "/registration"
+
+<div class=" vh-100 d-flex flex-column justify-content-center align-items-center">
+    <div class="bg-light card w-50 shadow-lg" style="max-width:400px; border-radius:25px;">
+        <div class="card-body">
+            <EditForm Model=@userRegisterDto OnValidSubmit="@HandleValidSubmit">
+                <DataAnnotationsValidator/>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group mb-2">
+                            <InputText class="form-control rounded-pill" id="firstName" placeholder="First name" @bind-Value="@userRegisterDto.FirstName"/>
+                            <ValidationMessage For="@(()=>userRegisterDto.FirstName)" class="form-text text-danger mt-2"/>
+                        </div>
+
+                        <div class="form-group mb-2">
+                            <InputText class="form-control rounded-pill" id="lastName" placeholder="Last name" @bind-Value="@userRegisterDto.LastName"/>
+                            <ValidationMessage For="@(()=>userRegisterDto.LastName)" class="form-text text-danger mt-2"/>
+                        </div>
+
+                        <div class="form-group mb-2">
+                            <InputText class="form-control rounded-pill" id="email" placeholder="Email" @bind-Value="@userRegisterDto.Email" />
+                            <ValidationMessage For="@(()=>userRegisterDto.Email)" class="form-text text-danger mt-2"/>
+                        </div>
+
+                        <div class="form-group mb-2">
+                            <InputText class="form-control rounded-pill" id="password" placeholder="Password" @bind-Value="@userRegisterDto.Password"/>
+                            <ValidationMessage For="@(()=>userRegisterDto.Password)" class="form-text text-danger mt-2"/>
+                        </div>
+
+                        <div class="d-grid gap-3 mt-5">
+                            <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm">Register</button>
+                            <a href="/login" class="cancel text-center" style="text-decoration:none" @onclick="RegisterCancelHandler">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </EditForm>
+        </div>
+
+    </div>
+
+</div>
+
+

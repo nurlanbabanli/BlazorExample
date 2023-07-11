@@ -17,7 +17,7 @@ namespace Business.Validation.FluentValidation
 
         protected override bool PreValidate(ValidationContext<User> context, ValidationResult result)
         {
-            if(context.InstanceToValidate!=null)
+            if(context.InstanceToValidate==null)
             {
                 result.Errors.Add(new ValidationFailure("", "Validation error: UserM data is null"));
                 return false;

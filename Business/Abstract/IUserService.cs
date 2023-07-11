@@ -13,5 +13,6 @@ namespace Business.Abstract
         Task<IDataResult<User>> AddAsync(User user);
         Task<IDataResult<User>> GetByEmailAsync(string email);
         Task<IDataResult<List<OperationClaim>>> GetClaimsAsync(User user);
+        Task<IResult> DeleteUserAsync(int userId);
     }
 }
